@@ -45,7 +45,7 @@
             config = {
               Cmd = [ "${bin}/bin/lokloob" ];
             };
-          }; 
+          };
         in
         with pkgs;
         {
@@ -56,9 +56,8 @@
             };
           devShells.default = mkShell {
             inputsFrom = [ bin ];
-            buildInputs = with pkgs; [ dive ];
+            buildInputs = with pkgs; [ dive pre-commit ];
           };
         }
       );
 }
-

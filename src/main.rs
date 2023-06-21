@@ -23,7 +23,7 @@ struct LokLoob {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Wait for the Vault server to start and respond on the API port 
+    /// Wait for the Vault server to start and respond on the API port
     WaitForServer {},
     /// Restore a Vault server from a backup
     Restore {},
