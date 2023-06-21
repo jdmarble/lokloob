@@ -30,7 +30,7 @@
           craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
           src = craneLib.cleanCargoSource ./.;
           nativeBuildInputs = with pkgs; [ rustToolchain pkg-config ];
-          buildInputs = with pkgs; [ ];
+          buildInputs = with pkgs; [ vault ];
           commonArgs = {
             inherit src buildInputs nativeBuildInputs;
           };
@@ -48,7 +48,6 @@
             };
           devShells.default = mkShell {
             inputsFrom = [ bin ];
-            buildInputs = [ vault ];
           };
         }
       );
