@@ -92,7 +92,7 @@ fn wait_for_server(client: &Client, base_url: &String) -> Result<(), reqwest::Er
 
 fn attempt_connection(client: &Client, base_url: &String) -> Result<(), reqwest::Error> {
     client
-        .head(format!("{}/v1/sys/health", base_url))
+        .head(format!("{base_url}/v1/sys/health"))
         .send()
         .map(|_result_code| ()) // Any result is fine for checking that the server is running.
 }
@@ -100,13 +100,13 @@ fn attempt_connection(client: &Client, base_url: &String) -> Result<(), reqwest:
 fn restore(client: &Client, base_url: &String) -> Result<(), reqwest::Error> {
 
     let _status1 = client
-        .get(format!("{}/sys/seal-status", base_url))
+        .get(format!("{base_url}/sys/seal-status"))
         .send()
         .expect("failed to get seal status")
         .json::<SealStatus>();
 
     let _init_resp = client
-        .post(format!("{}/sys/init", base_url))
+        .post(format!("{base_url}/sys/init"))
         .json(&InitRequest {
             secret_shares: 1,
             secret_threshold: 1,
@@ -116,7 +116,7 @@ fn restore(client: &Client, base_url: &String) -> Result<(), reqwest::Error> {
         .json::<Init>();
 
     let _status2 = client
-        .get(format!("{}/sys/seal-status", base_url))
+        .get(format!("{base_url}/sys/seal-status"))
         .send()
         .expect("failed to get seal status")
         .json::<SealStatus>();

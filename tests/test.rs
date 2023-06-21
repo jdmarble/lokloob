@@ -68,8 +68,8 @@ fn test_wait_for_server() {
         .wait();
 
     match result {
-        Ok(result_code) => assert!(result_code.success(), "Returned nonsuccess {}", result_code),
-        Err(error) => panic!("cargo run failed to stop: {}", error),
+        Ok(result_code) => assert!(result_code.success(), "Returned nonsuccess {result_code}"),
+        Err(error) => panic!("cargo run failed to stop: {error}"),
     }
 }
 
@@ -85,7 +85,7 @@ fn test_restore() {
         .wait();
 
     match result {
-        Ok(result_code) => assert!(result_code.success(), "Returned nonsuccess {}", result_code),
-        Err(error) => panic!("cargo run failed to stop: {}", error),
+        Ok(result_code) => assert!(result_code.success(), "Returned nonsuccess {result_code}"),
+        Err(error) => panic!("cargo run failed to stop: {error}"),
     }
 }
