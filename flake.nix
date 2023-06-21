@@ -38,16 +38,25 @@
           bin = craneLib.buildPackage (commonArgs // {
             inherit cargoArtifacts;
           });
+          containerImage = pkgs.dockerTools.buildImage {
+            name = "lokloob";
+            tag = "latest";
+            copyToRoot = [ bin ];
+            config = {
+              Cmd = [ "${bin}/bin/lokloob" ];
+            };
+          }; 
         in
         with pkgs;
         {
           packages =
             {
-              inherit bin;
+              inherit bin containerImage;
               default = bin;
             };
           devShells.default = mkShell {
             inputsFrom = [ bin ];
+            buildInputs = with pkgs; [ dive ];
           };
         }
       );
