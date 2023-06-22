@@ -1,8 +1,7 @@
-use std::process::{Child, Command};
 use json::object;
-use tempfile::{NamedTempFile, TempDir};
 use std::io::Write;
-
+use std::process::{Child, Command};
+use tempfile::{NamedTempFile, TempDir};
 
 struct TestVault {
     child: Child,
@@ -15,11 +14,12 @@ struct TestVault {
 
 impl TestVault {
     fn new() -> Self {
-        let raft_storage_path = TempDir::new().expect("failed to create temporary directory for raft storage");
+        let raft_storage_path =
+            TempDir::new().expect("failed to create temporary directory for raft storage");
         let api_port = portpicker::pick_unused_port().expect("no ports free");
         let cluster_port = portpicker::pick_unused_port().expect("no ports free");
 
-        let config_json = object!{
+        let config_json = object! {
             "api_addr": format!("http://127.0.0.1:{}", api_port),
             "cluster_addr": format!("http://127.0.0.1:{}", cluster_port),
             "disable_mlock": true,
@@ -33,7 +33,9 @@ impl TestVault {
             } }
         };
         let mut config_file = NamedTempFile::new().expect("failed to open temporary config file");
-        config_file.write_all(json::stringify(config_json).as_bytes()).expect("failed to write config file");
+        config_file
+            .write_all(json::stringify(config_json).as_bytes())
+            .expect("failed to write config file");
 
         let child = Command::new("vault")
             .arg("server")
@@ -60,7 +62,8 @@ impl Drop for TestVault {
 fn test_wait_for_server() {
     let vault = TestVault::new();
 
-    let result = Command::new("cargo").args(["run", "--"])
+    let result = Command::new("cargo")
+        .args(["run", "--"])
         .arg(format!("--port={}", vault.api_port))
         .arg("wait-for-server")
         .spawn()
@@ -77,7 +80,8 @@ fn test_wait_for_server() {
 fn test_restore() {
     let vault = TestVault::new();
 
-    let result = Command::new("cargo").args(["run", "--"])
+    let result = Command::new("cargo")
+        .args(["run", "--"])
         .arg(format!("--port={}", vault.api_port))
         .arg("restore")
         .spawn()

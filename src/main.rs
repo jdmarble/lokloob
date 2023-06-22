@@ -1,9 +1,8 @@
-use std::thread;
-use std::time::Duration;
 use clap::{Parser, Subcommand};
 use reqwest::blocking::Client;
 use serde::{Deserialize, Serialize};
-
+use std::thread;
+use std::time::Duration;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -65,13 +64,11 @@ fn main() -> Result<(), reqwest::Error> {
     let base_url = format!("http://{}:{}/v1", args.address, args.port);
 
     match &args.command {
-        Commands::WaitForServer {} => {
-            wait_for_server(&client, &base_url)
-        },
+        Commands::WaitForServer {} => wait_for_server(&client, &base_url),
         Commands::Restore {} => {
             wait_for_server(&client, &base_url)?;
             restore(&client, &base_url)
-        },
+        }
     }
 }
 
@@ -86,7 +83,7 @@ fn wait_for_server(client: &Client, base_url: &String) -> Result<(), reqwest::Er
                 thread::sleep(Duration::from_secs(1));
             }
         }
-    };
+    }
     Ok(())
 }
 
@@ -98,7 +95,6 @@ fn attempt_connection(client: &Client, base_url: &String) -> Result<(), reqwest:
 }
 
 fn restore(client: &Client, base_url: &String) -> Result<(), reqwest::Error> {
-
     let _status1 = client
         .get(format!("{base_url}/sys/seal-status"))
         .send()
@@ -110,7 +106,7 @@ fn restore(client: &Client, base_url: &String) -> Result<(), reqwest::Error> {
         .json(&InitRequest {
             secret_shares: 1,
             secret_threshold: 1,
-       })
+        })
         .send()
         .expect("failed to post init request")
         .json::<Init>();
