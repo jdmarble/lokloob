@@ -1,0 +1,12 @@
+[book]
+authors = ["James D. Marble"]
+language = "en"
+multilingual = false
+src = "docs"
+title = "lokloob"
+
+[build]
+build-dir = "target/book"
+
+[preprocessor.plantuml]
+plantuml-cmd="plantuml"

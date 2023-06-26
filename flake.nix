@@ -56,7 +56,13 @@
             };
           devShells.default = mkShell {
             inputsFrom = [ bin ];
-            buildInputs = with pkgs; [ dive pre-commit ];
+            buildInputs = with pkgs; [
+              dive
+              mdbook
+              openssl
+              plantuml
+              pre-commit
+            ];
           };
         }
       );

@@ -59,13 +59,13 @@ impl Drop for TestVault {
 }
 
 #[test]
-fn test_wait_for_server() {
+fn test_bootstrap() {
     let vault = TestVault::new();
 
     let result = Command::new("cargo")
         .args(["run", "--"])
-        .arg(format!("--port={}", vault.api_port))
-        .arg("wait-for-server")
+        .arg(format!("--vault-api-port={}", vault.api_port))
+        .arg("--bootstrap")
         .spawn()
         .expect("cargo run failed to start")
         .wait();
@@ -82,8 +82,7 @@ fn test_restore() {
 
     let result = Command::new("cargo")
         .args(["run", "--"])
-        .arg(format!("--port={}", vault.api_port))
-        .arg("restore")
+        .arg(format!("--vault-api-port={}", vault.api_port))
         .spawn()
         .expect("cargo run failed to start")
         .wait();
