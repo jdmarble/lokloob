@@ -62,6 +62,7 @@
               openssl
               plantuml
               pre-commit
+              rust-analyzer
             ];
           };
         }
