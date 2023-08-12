@@ -62,13 +62,16 @@ impl Drop for TestVault {
 fn test_bootstrap() {
     let vault = TestVault::new();
 
-    let result = Command::new("cargo")
+    let lokloob_child = Command::new("cargo")
         .args(["run", "--"])
         .arg(format!("--vault-api-port={}", vault.api_port))
         .arg("--bootstrap")
         .spawn()
-        .expect("cargo run failed to start")
-        .wait();
+        .unwrap();
+
+    let lokloob_stdout = lokloob_child.stdout.take().unwrap();
+
+    lokloob_child.wait();
 
     match result {
         Ok(result_code) => assert!(result_code.success(), "Returned nonsuccess {result_code}"),

@@ -71,24 +71,23 @@ fn main() {
     let client = Client::builder().build().expect("failed to build client");
     let base_url = format!("http://{}:{}/v1", args.vault_api_host, args.vault_api_port);
 
-    let snapshot_url = &args.snapshot_url.expect("URL prompt not implemented yet");
-    let snapshot_body =
-        download_snapshot(args.bootstrap, snapshot_url).expect("error downloading snapshot");
-
     let init_response = initialize(&client, &base_url).expect("failed to initialize");
     if !args.bootstrap {
+        let snapshot_url = &args.snapshot_url.expect("URL prompt not implemented yet");
+        let snapshot_body =
+            download_snapshot(args.bootstrap, snapshot_url).expect("error downloading snapshot");
         restore(&client, &base_url, snapshot_body.unwrap()).expect("failed to restore");
     }
 
     let unseal_key = if args.bootstrap {
         init_response.keys.get(0).expect("expected exactly one key")
     } else {
-        &args
-            .unseal_key
+        args.unseal_key
+            .as_ref()
             .expect("unseal key prompt not implemented yet")
     };
 
-    unseal(&client, &base_url, &args.unseal_key.unwrap()).expect("failed to unseal");
+    unseal(&client, &base_url, unseal_key).expect("failed to unseal");
 }
 
 fn download_snapshot(bootstrap: bool, snapshot_url: &Url) -> Result<Option<Body>, std::io::Error> {
@@ -135,7 +134,7 @@ fn initialize(client: &Client, base_url: &String) -> Result<Init, reqwest::Error
     let unseal_resp = client
         .post(format!("{base_url}/sys/unseal"))
         .json(&UnsealRequest {
-            key: init_resp.keys[0],
+            key: init_resp.keys[0].clone(),
             migrate: None,
             reset: None,
         })
